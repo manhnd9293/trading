@@ -1,7 +1,7 @@
 package com.manhnd.finance_trading.api.users.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.manhnd.finance_trading.common.UserRole;
+import com.manhnd.finance_trading.common.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

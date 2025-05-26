@@ -18,6 +18,6 @@ application:
   security:
     jwt:
       secret-key: changeinprodfjkhasjflkasjfkasjfklsasdfsdsfsfsfsdfsdfsdf
-      expiration: 1100000
+      expiration: 11000000000000
       refresh-token:
         expiration: 100000000000
