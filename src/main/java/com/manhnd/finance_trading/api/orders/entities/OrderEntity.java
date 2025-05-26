@@ -2,6 +2,7 @@ package com.manhnd.finance_trading.api.orders.entities;
 
 import com.manhnd.finance_trading.api.users.entities.UserEntity;
 import com.manhnd.finance_trading.common.entites.BaseEntity;
+import com.manhnd.finance_trading.common.enums.OrderState;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +29,8 @@ public class OrderEntity extends BaseEntity {
     @OneToMany(targetEntity = OrderItemEntity.class, mappedBy = "order", fetch = FetchType.EAGER)
 //    @JoinColumn(name = "order_id")
     private List<OrderItemEntity> orderItems;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_state")
+    private OrderState orderState;
 }

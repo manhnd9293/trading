@@ -9,6 +9,7 @@ import com.manhnd.finance_trading.api.orders.repositories.OrdersRepository;
 import com.manhnd.finance_trading.api.products.entites.ProductEntity;
 import com.manhnd.finance_trading.api.products.repositories.ProductsRepository;
 import com.manhnd.finance_trading.api.users.entities.UserEntity;
+import com.manhnd.finance_trading.common.enums.OrderState;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -26,6 +27,7 @@ public class OrdersService {
     private OrderItemsRepository orderItemsRepository;
     private ProductsRepository productsRepository;
 
+
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public OrderEntity createOrder(CreateOrderDto createOrderDto, UserEntity userEntity) throws BadRequestException {
         List<UUID> productIds = createOrderDto.getItems().stream().map(OrderItemDto::getProductId).toList();
@@ -36,11 +38,18 @@ public class OrdersService {
 
         Map<UUID, Double> productIdToPrice = products.stream().collect(Collectors.toMap(ProductEntity::getId, ProductEntity::getPrice));
 
-        OrderEntity newOrder = OrderEntity.builder().userId(userEntity.getId()).build();
+        OrderEntity newOrder = OrderEntity.builder()
+                .userId(userEntity
+                .getId())
+                .orderState(OrderState.CREATE)
+                .build();
         OrderEntity savedOrder = this.ordersRepository.save(newOrder);
         var list = createOrderDto.getItems().stream().map(item -> OrderItemEntity.builder()
-                .orderId(savedOrder.getId()).productId(item.getProductId()).quantity(item.getQuantity())
-                .price(productIdToPrice.get(item.getProductId())).build()).toList();
+                .orderId(savedOrder.getId())
+                .productId(item.getProductId())
+                .quantity(item.getQuantity())
+                .price(productIdToPrice.get(item.getProductId()))
+                .build()).toList();
         this.orderItemsRepository.saveAll(list);
 
         return this.ordersRepository.findById(savedOrder.getId()).get();
